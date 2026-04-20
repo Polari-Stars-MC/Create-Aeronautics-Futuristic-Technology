@@ -1,0 +1,59 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+issueTrackerURL = "https://github.com/ryanhcode/sable/issues"
+license = "PolyForm Shield License 1.0.0"
+
+[[mods]]
+modId = "sable"
+version = "1.0.5"
+displayName = "Sable"
+authors = "RyanHCode"
+credits = "Ocelot, Eriksonn, Cyvack, Bee, Kyan, Cake, Rhyguy1"
+description = '''Interactive moving block structures with physics.'''
+logoFile = "icon.png"
+
+["lithium:options"]
+"mixin.entity.collisions.unpushable_cramming" = false
+"mixin.world.chunk_access" = false
+"mixin.world.chunk_ticking" = false
+
+[[dependencies.sable]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1.219,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.sable]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1]"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.sable]]
+modId = "flywheel"
+type = "optional"
+versionRange = "[1.0.6,)"
+ordering = "AFTER"
+side = "CLIENT"
+
+[[dependencies.sable]]
+modId = "sablecompanion"
+type = "incompatible"
+versionRange = "(1.4.2,)"
+reason = "Sable is out of date"
+
+[[dependencies.sable]]
+modId = "scalablelux"
+type = "incompatible"
+
+[[dependencies.sable]]
+modId = "littletiles"
+type = "incompatible"
+
+[[mixins]]
+config = "sable.mixins.json"
+
+[[mixins]]
+config = "sable-neoforge.mixins.json"

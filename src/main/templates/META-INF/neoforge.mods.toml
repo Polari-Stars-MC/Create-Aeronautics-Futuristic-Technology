@@ -91,7 +91,7 @@ config="${mod_id}.mixins.json"
 [[dependencies.${mod_id}]]
 modId="create"
 type="required"
-versionRange="[${create_version},)"
+versionRange="[6.0.9,)"
 ordering="NONE"
 side="BOTH"
 
@@ -103,7 +103,7 @@ ordering="NONE"
 side="BOTH"
 
 [[dependencies.${mod_id}]]
-modId="aeronautics_bundled"
+modId="aeronautics"
 type="required"
 versionRange="[${aeronautics_version},)"
 ordering="NONE"

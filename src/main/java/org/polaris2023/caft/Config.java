@@ -17,6 +17,11 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public class Config {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
+    public static final ModConfigSpec.DoubleValue PCA_STRESS_IMPACT = BUILDER
+            .comment("Base stress impact of the PCA block at 1 RPM.")
+            .defineInRange("kinetics.pcaStressImpact", 8.0D, 0.0D, Double.MAX_VALUE);
+
+
     static final ModConfigSpec SPEC = BUILDER.build();
 
 }

@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "caft:block/pca"
+    },
+    "facing=east": {
+      "model": "caft:block/pca",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "caft:block/pca",
+      "x": 270
+    },
+    "facing=south": {
+      "model": "caft:block/pca",
+      "x": 90
+    },
+    "facing=up": {
+      "model": "caft:block/pca",
+      "x": 180
+    },
+    "facing=west": {
+      "model": "caft:block/pca",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

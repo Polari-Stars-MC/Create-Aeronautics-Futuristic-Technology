@@ -50,6 +50,7 @@ neoForge {
         mappingsVersion = project.parchment_mappings_version
         minecraftVersion = project.parchment_minecraft_version
     }
+    accessTransformers.from(file("src/main/resources/META-INF/at.cfg"))
 
     // This line is optional. Access Transformers are automatically detected
     // accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
@@ -174,6 +175,9 @@ dependencies {
 
     // Flywheel (Create transitive; declare explicitly since we excluded Create's transitives)
     implementation("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
+
+    // Ponder API is referenced by Create block entity classes during compilation.
+    implementation("net.createmod.ponder:ponder-neoforge:1.0.82+mc1.21.1")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -2,7 +2,9 @@
   "required": true,
   "package": "org.polaris2023.caft.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
+  "mixins": [
+    "KineticBlockEntityMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

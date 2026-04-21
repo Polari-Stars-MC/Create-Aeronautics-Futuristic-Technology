@@ -19,6 +19,8 @@ public class PCABlockEntity extends SimpleKineticBlockEntity {
     private static final double SCAN_RADIUS = 128.0;
     private int scanCooldown = 0;
     private RemoteStressManager.BaseStationInfo stationInfo;
+    private boolean isNetworkReady = false;
+    private int initDelay = 20;
 
     public PCABlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -27,13 +29,12 @@ public class PCABlockEntity extends SimpleKineticBlockEntity {
     @Override
     public void initialize() {
         super.initialize();
-        // 先注册
         RemoteStressManager.registerBaseStation(level, worldPosition);
         stationInfo = RemoteStressManager.getBaseStation(worldPosition);
 
-        // 立即扫描一次，避免延迟导致的应力突变
-        if (level != null && !level.isClientSide) {
-            scanAndBindSubLevel();
+        if (stationInfo != null) {
+            stationInfo.boundSubLevelId = null;
+            stationInfo.cachedSubLevel = null;
         }
     }
 
@@ -41,31 +42,40 @@ public class PCABlockEntity extends SimpleKineticBlockEntity {
 
     @Override
     public void tick() {
+        if (initDelay > 0) {
+            initDelay--;
+            if (initDelay == 0) {
+                isNetworkReady = true;
+                getOrCreateNetwork().updateNetwork();
+            }
+            super.tick();
+            return;
+        }
+
         super.tick();
 
         if (level == null || level.isClientSide) return;
+
+        if (!isNetworkReady) return;
 
         if (stationInfo == null) {
             stationInfo = RemoteStressManager.getBaseStation(worldPosition);
             if (stationInfo == null) return;
         }
 
-        // 先更新绑定状态
         if (scanCooldown-- <= 0) {
             scanCooldown = 20;
             scanAndBindSubLevel();
         }
 
-        // 检查绑定的SubLevel是否有效
+        boolean isActive = !level.hasNeighborSignal(worldPosition);
+        float currentStress = calculateStressApplied();
+        RemoteStressManager.updateBaseStation(worldPosition, currentStress, getSpeed(), isActive);
+
         if (stationInfo.boundSubLevelId != null &&
                 (stationInfo.cachedSubLevel == null || stationInfo.cachedSubLevel.isRemoved())) {
             unbindSubLevel();
         }
-
-        // 最后才更新基站状态（让calculateStressApplied使用最新状态）
-        boolean isActive = !level.hasNeighborSignal(worldPosition);
-        float currentStress = calculateStressApplied();
-        RemoteStressManager.updateBaseStation(worldPosition, currentStress, getSpeed(), isActive);
     }
 
     private void scanAndBindSubLevel() {
@@ -138,39 +148,21 @@ public class PCABlockEntity extends SimpleKineticBlockEntity {
 
     @Override
     public float calculateStressApplied() {
-        // 未初始化完成时不应施加应力
-        if (stationInfo == null) {
-            System.out.println("[PCA] StationInfo null at " + worldPosition);
-            return 0f;
-        }
+        if (!isNetworkReady) return 0f;
+        if (initDelay > 0) return 0f;
 
-        // 检查红石信号
-        if (level != null && level.hasNeighborSignal(worldPosition)) {
-            System.out.println("[PCA] Has redstone signal at " + worldPosition);
-            return 0f;
-        }
+        if (stationInfo == null) return 0f;
 
-        // 检查是否有效绑定了 SubLevel
-        if (stationInfo.boundSubLevelId == null) {
-            System.out.println("[PCA] No bound SubLevel at " + worldPosition);
-            return 0f;
-        }
+        if (level != null && level.hasNeighborSignal(worldPosition)) return 0f;
 
-        // 检查绑定的 SubLevel 是否在有效距离内
-        if (stationInfo.cachedSubLevel == null || stationInfo.cachedSubLevel.isRemoved()) {
-            System.out.println("[PCA] Cached SubLevel invalid at " + worldPosition);
-            return 0f;
-        }
+        if (stationInfo.boundSubLevelId == null) return 0f;
 
-        // 检查距离
+        if (stationInfo.cachedSubLevel == null || stationInfo.cachedSubLevel.isRemoved()) return 0f;
+
         double distance = calculateDistanceToBounds(stationInfo.cachedSubLevel.boundingBox());
-        if (distance > SCAN_RADIUS) {
-            System.out.println("[PCA] SubLevel too far: " + distance + " at " + worldPosition);
-            return 0f;
-        }
+        if (distance > SCAN_RADIUS) return 0f;
 
-        System.out.println("[PCA] Applying stress: 0f at " + worldPosition);
-        return 0f;
+        return 16384f;
     }
 
     public UUID getBoundSubLevelId() {

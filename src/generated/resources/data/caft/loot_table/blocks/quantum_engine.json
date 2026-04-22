@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "caft:pca"
+          "name": "caft:quantum_engine"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "caft:blocks/pca"
+  "random_sequence": "caft:blocks/quantum_engine"
 }

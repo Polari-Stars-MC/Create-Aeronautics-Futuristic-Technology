@@ -1,6 +1,7 @@
 package org.polaris2023.caft;
 
 import com.tterrag.registrate.Registrate;
+import org.polaris2023.caft.quantum.QuantumPropulsionPhaseOne;
 import org.polaris2023.caft.registry.ModBlocks;
 import org.polaris2023.caft.registry.ModBlockEntities;
 import org.slf4j.Logger;
@@ -20,8 +21,9 @@ public class CreateAeronauticsFuturisticTechnology {
 
     public CreateAeronauticsFuturisticTechnology(IEventBus modEventBus, ModContainer modContainer) {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        ModBlocks.init();
+        QuantumPropulsionPhaseOne.bootstrap();
         ModBlockEntities.init();
+        ModBlocks.init();
     }
 
 }

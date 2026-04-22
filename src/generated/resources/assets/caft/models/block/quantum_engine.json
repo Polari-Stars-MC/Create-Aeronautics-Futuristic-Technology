@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "bottom": "caft:block/quantum_engine_bottom",
+    "front": "caft:block/quantum_engine_front",
+    "side": "caft:block/quantum_engine_side",
+    "top": "caft:block/quantum_engine_top"
+  }
+}

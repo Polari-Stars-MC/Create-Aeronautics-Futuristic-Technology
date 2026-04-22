@@ -8,5 +8,6 @@ public class FTPacketManager {
 
     public static void init() {
         INSTANCE.registerServerbound(RemoveDraggedSubLevelPacket.TYPE, RemoveDraggedSubLevelPacket.CODEC, RemoveDraggedSubLevelPacket::handle);
+        INSTANCE.registerServerbound(RealignDraggedSubLevelPacket.TYPE, RealignDraggedSubLevelPacket.CODEC, RealignDraggedSubLevelPacket::handle);
     }
 }

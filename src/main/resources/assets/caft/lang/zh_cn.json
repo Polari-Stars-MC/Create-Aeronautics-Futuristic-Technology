@@ -1,3 +1,6 @@
 {
-  "block.caft.quantum_engine": "量子引擎"
+  "block.caft.quantum_engine": "量子引擎",
+  "key.caft.adjust": "物理实体调正",
+  "key.caft.del": "删除物理实体",
+  "key.categories.caft": "机械动力航空学：未来科技"
 }

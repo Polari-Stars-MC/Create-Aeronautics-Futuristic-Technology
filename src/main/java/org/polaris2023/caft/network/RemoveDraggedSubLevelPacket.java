@@ -41,7 +41,8 @@ public record RemoveDraggedSubLevelPacket(UUID subLevelId) implements CustomPack
         if (!(container.getSubLevel(packet.subLevelId()) instanceof ServerSubLevel serverSubLevel)) {
             return;
         }
-
+        serverSubLevel.getPlot().destroyAllBlocks();
         container.removeSubLevel(serverSubLevel, SubLevelRemovalReason.REMOVED);
+
     }
 }

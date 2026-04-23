@@ -28,6 +28,7 @@ public class CreateAeronauticsFuturisticTechnology {
         REGISTRATE.addRawLang("key.categories.caft", "Create Aeronautics Futuristic Technology");
         REGISTRATE.addRawLang("key.caft.del", "Delete physics by baka4n");
         REGISTRATE.addRawLang("key.caft.adjust", "Adjust physics by baka4n");
+
     }
 
     public static ResourceLocation path(String path) {

@@ -6,6 +6,8 @@ on:
 jobs:
   check-version:
     runs-on: ubuntu-latest
+    outputs:
+      mod_version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,7 +20,7 @@ jobs:
 
   build:
     needs: check-version
-    if: steps.version.outputs.version == github.event.head_commit.message
+    if: needs.check-version.outputs.mod_version == github.event.head_commit.message
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

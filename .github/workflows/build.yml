@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+      COMMIT_MESSAGE: ${{ github.event.head_commit.id }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

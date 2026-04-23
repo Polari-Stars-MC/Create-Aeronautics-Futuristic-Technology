@@ -15,21 +15,19 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     steps:
-      - name: Delete skipped build workflow run
+      - name: Delete run when build job was not executed
         uses: actions/github-script@v7
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
 
-            const runId = context.eventName === "workflow_run"
-              ? context.payload.workflow_run.id
-              : null;
-
-            if (!runId) {
-              core.info("Manual run detected. No target workflow run was provided.");
+            if (context.eventName !== "workflow_run") {
+              core.info("Manual run detected. Cleanup only applies to workflow_run events.");
               return;
             }
+
+            const runId = context.payload.workflow_run.id;
 
             const jobs = await github.paginate(
               github.rest.actions.listJobsForWorkflowRun,
@@ -44,19 +42,25 @@ jobs:
             const buildJob = jobs.find((job) => job.name === "build");
 
             if (!buildJob) {
-              core.info(`No 'build' job found for workflow run ${runId}.`);
+              core.info(`Workflow run ${runId} has no 'build' job. Deleting it.`);
+              await github.rest.actions.deleteWorkflowRun({
+                owner,
+                repo,
+                run_id: runId,
+              });
               return;
             }
 
-            if (buildJob.conclusion !== "skipped") {
-              core.info(`Workflow run ${runId} kept because build job conclusion is '${buildJob.conclusion}'.`);
+            core.info(`Workflow run ${runId} build conclusion: ${buildJob.conclusion}`);
+
+            if (buildJob.conclusion === "skipped") {
+              await github.rest.actions.deleteWorkflowRun({
+                owner,
+                repo,
+                run_id: runId,
+              });
+              core.info(`Deleted workflow run ${runId} because the build job was skipped.`);
               return;
             }
 
-            await github.rest.actions.deleteWorkflowRun({
-              owner,
-              repo,
-              run_id: runId,
-            });
-
-            core.info(`Deleted workflow run ${runId} because the build job was skipped.`);
+            core.info(`Kept workflow run ${runId} because the build job executed with conclusion '${buildJob.conclusion}'.`);

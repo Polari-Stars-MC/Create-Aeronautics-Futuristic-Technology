@@ -15,52 +15,85 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     steps:
-      - name: Delete run when build job was not executed
+      - name: Delete skipped runs from target workflow
         uses: actions/github-script@v7
+        env:
+          TARGET_WORKFLOW_PATH: .github/workflows/build.yml
+          TARGET_JOB_NAME: build
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
+            const targetWorkflowPath = process.env.TARGET_WORKFLOW_PATH;
+            const targetJobName = process.env.TARGET_JOB_NAME;
 
-            if (context.eventName !== "workflow_run") {
-              core.info("Manual run detected. Cleanup only applies to workflow_run events.");
-              return;
-            }
-
-            const runId = context.payload.workflow_run.id;
-
-            const jobs = await github.paginate(
-              github.rest.actions.listJobsForWorkflowRun,
+            const workflows = await github.paginate(
+              github.rest.actions.listRepoWorkflows,
               {
                 owner,
                 repo,
-                run_id: runId,
                 per_page: 100,
               }
             );
 
-            const buildJob = jobs.find((job) => job.name === "build");
+            const targetWorkflow = workflows.find((workflow) => workflow.path === targetWorkflowPath);
 
-            if (!buildJob) {
-              core.info(`Workflow run ${runId} has no 'build' job. Deleting it.`);
-              await github.rest.actions.deleteWorkflowRun({
-                owner,
-                repo,
-                run_id: runId,
-              });
+            if (!targetWorkflow) {
+              core.setFailed(`Target workflow '${targetWorkflowPath}' was not found.`);
               return;
             }
 
-            core.info(`Workflow run ${runId} build conclusion: ${buildJob.conclusion}`);
+            let runs = [];
 
-            if (buildJob.conclusion === "skipped") {
-              await github.rest.actions.deleteWorkflowRun({
-                owner,
-                repo,
-                run_id: runId,
-              });
-              core.info(`Deleted workflow run ${runId} because the build job was skipped.`);
-              return;
+            if (context.eventName === "workflow_run") {
+              const currentRun = context.payload.workflow_run;
+              if (currentRun.path !== targetWorkflowPath) {
+                core.info(`Ignoring workflow_run for '${currentRun.path}'. Target is '${targetWorkflowPath}'.`);
+                return;
+              }
+              runs = [currentRun];
+            } else {
+              runs = await github.paginate(
+                github.rest.actions.listWorkflowRuns,
+                {
+                  owner,
+                  repo,
+                  workflow_id: targetWorkflow.id,
+                  status: "completed",
+                  per_page: 100,
+                }
+              );
             }
 
-            core.info(`Kept workflow run ${runId} because the build job executed with conclusion '${buildJob.conclusion}'.`);
+            for (const run of runs) {
+              const jobs = await github.paginate(
+                github.rest.actions.listJobsForWorkflowRun,
+                {
+                  owner,
+                  repo,
+                  run_id: run.id,
+                  per_page: 100,
+                }
+              );
+
+              const buildJob = jobs.find((job) => job.name === targetJobName);
+
+              if (!buildJob) {
+                core.info(`Kept run ${run.id} because job '${targetJobName}' was not found.`);
+                continue;
+              }
+
+              core.info(`Run ${run.id} job '${targetJobName}' conclusion: ${buildJob.conclusion}`);
+
+              if (buildJob.conclusion === "skipped") {
+                await github.rest.actions.deleteWorkflowRun({
+                  owner,
+                  repo,
+                  run_id: run.id,
+                });
+                core.info(`Deleted run ${run.id} because job '${targetJobName}' was skipped.`);
+                continue;
+              }
+
+              core.info(`Kept run ${run.id} because job '${targetJobName}' concluded '${buildJob.conclusion}'.`);
+            }

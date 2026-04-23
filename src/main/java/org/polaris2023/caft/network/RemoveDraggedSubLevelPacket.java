@@ -15,6 +15,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import org.polaris2023.caft.CreateAeronauticsFuturisticTechnology;
 
 import java.util.UUID;
@@ -46,19 +48,18 @@ public record RemoveDraggedSubLevelPacket(UUID subLevelId) implements CustomPack
             return;
         }
         ServerLevelPlot plot = serverSubLevel.getPlot();
-        plot.destroyAllBlocks();
         if (plot.localBounds == null || plot.localBounds == BoundingBox3i.EMPTY) {
             return;
         }
 
         final Level level_ = plot.getSubLevel().getLevel();
+        CreateAeronauticsFuturisticTechnology.LOGGER.error(level_.getDescriptionKey());
         final BoundingBox3i bounds = plot.localBounds;
 
         for (int x = bounds.minX(); x <= bounds.maxX(); x++) {
             for (int y = bounds.minY(); y <= bounds.maxY(); y++) {
                 for (int z = bounds.minZ(); z <= bounds.maxZ(); z++) {
                     final BlockPos pos = new BlockPos(x, y, z);
-
                     level_.destroyBlock(pos, false);
                 }
             }

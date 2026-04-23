@@ -1,4 +1,4 @@
-package org.polaris2023.caft.event.client;
+package org.polaris2023.caft.event;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.simulated_team.simulated.SimulatedClient;
@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -18,7 +19,7 @@ import org.lwjgl.glfw.GLFW;
 import org.polaris2023.caft.CreateAeronauticsFuturisticTechnology;
 import org.polaris2023.caft.network.RemoveDraggedSubLevelPacket;
 
-@EventBusSubscriber(modid = CreateAeronauticsFuturisticTechnology.MODID)
+@EventBusSubscriber(modid = CreateAeronauticsFuturisticTechnology.MODID, value = Dist.CLIENT)
 public class KeyEvents {
 
     public static final KeyMapping DELETE = new KeyMapping(

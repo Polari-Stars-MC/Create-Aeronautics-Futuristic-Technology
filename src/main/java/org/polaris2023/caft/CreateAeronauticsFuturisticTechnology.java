@@ -3,7 +3,6 @@ package org.polaris2023.caft;
 import com.tterrag.registrate.Registrate;
 import net.minecraft.resources.ResourceLocation;
 import org.polaris2023.caft.network.FTPacketManager;
-import org.polaris2023.caft.quantum.QuantumPropulsionPhaseOne;
 import org.polaris2023.caft.registry.ModBlocks;
 import org.polaris2023.caft.registry.ModBlockEntities;
 import org.slf4j.Logger;
@@ -23,7 +22,6 @@ public class CreateAeronauticsFuturisticTechnology {
 
     public CreateAeronauticsFuturisticTechnology(IEventBus modEventBus, ModContainer modContainer) {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        QuantumPropulsionPhaseOne.bootstrap();
         ModBlockEntities.init();
         ModBlocks.init();
         FTPacketManager.init();

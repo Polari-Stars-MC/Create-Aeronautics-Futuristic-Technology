@@ -6,32 +6,19 @@ on:
 jobs:
   check-version:
     runs-on: ubuntu-latest
-    outputs:
-      should_build: ${{ steps.check.outputs.should_build }}
-      mod_version: ${{ steps.check.outputs.mod_version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Check commit message against mod version
-        id: check
-        shell: bash
-        run: |
-          mod_version="$(grep '^mod_version=' gradle.properties | cut -d'=' -f2- | tr -d '\r')"
-          commit_message="${{ github.event.head_commit.message }}"
-
-          echo "mod_version=$mod_version" >> "$GITHUB_OUTPUT"
-
-          if [ "$commit_message" = "$mod_version" ]; then
-            echo "should_build=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "should_build=false" >> "$GITHUB_OUTPUT"
-            echo "Skip build: commit message '$commit_message' does not match mod_version '$mod_version'."
-          fi
+      - uses: BrycensRanch/read-properties-action@v1
+        id: version
+        with:
+          file: gradle.properties
+          property: mod_version
+          default: 1.0.0
 
   build:
     needs: check-version
-    if: needs.check-version.outputs.should_build == 'true'
+    if: steps.version.outputs.version == github.event.head_commit.message
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

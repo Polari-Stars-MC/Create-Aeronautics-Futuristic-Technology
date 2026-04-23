@@ -7,7 +7,7 @@ permissions:
   actions: write
 
 jobs:
-  build:
+  pre:
     runs-on: ubuntu-latest
     env:
       COMMIT_MESSAGE: ${{ github.event.head_commit.name }}
@@ -24,52 +24,27 @@ jobs:
           file: gradle.properties
           property: mod_version
           default: 1.0.0
-
-      - name: Debug version comparison
-        shell: bash
-        run: |
-          mod_version="${{ steps.version.outputs.version }}"
-          commit_message="${{ env.COMMIT_MESSAGE }}"
-
-          echo "mod_version=[$mod_version]"
-          echo "commit_message=[$commit_message]"
-          echo "mod_version_length=${#mod_version}"
-          echo "commit_message_length=${#commit_message}"
-
-          if [ "$mod_version" = "$commit_message" ]; then
-            echo "version_match=true"
-          else
-            echo "version_match=false"
-          fi
-
+  build:
+    needs: pre
+    if: steps.version.outputs.version == env.COMMIT_MESSAGE
+    runs-on: ubuntu-latest
       - name: Setup JDK 21
-        if: steps.version.outputs.version == env.COMMIT_MESSAGE
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
 
       - name: Setup Gradle
-        if: steps.version.outputs.version == env.COMMIT_MESSAGE
         uses: gradle/actions/setup-gradle@v4
 
-      # This is needed to be able to run ./gradlew below
-      # You can run `git update-index --chmod +x gradlew` then remove this step.
       - name: Make Gradle wrapper executable
-        if: steps.version.outputs.version == env.COMMIT_MESSAGE
         run: chmod +x ./gradlew
 
+      - name: Mod Metadata generated with Gradle
+        run: ./gradlew generateModMetadata
+
+      - name: Data Generated with Gradle
+        run: ./gradlew runData
+
       - name: Build with Gradle
-        if: steps.version.outputs.version == env.COMMIT_MESSAGE
         run: ./gradlew build
-#
-#      - name: Delete current workflow run when version does not match
-#        if: steps.version.outputs.version != env.COMMIT_MESSAGE
-#        uses: actions/github-script@v7
-#        with:
-#          script: |
-#            await github.rest.actions.deleteWorkflowRun({
-#              owner: context.repo.owner,
-#              repo: context.repo.repo,
-#              run_id: context.runId,
-#            });

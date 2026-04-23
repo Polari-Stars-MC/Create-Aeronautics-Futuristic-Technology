@@ -1,0 +1,57 @@
+name: Clean
+
+on:
+  workflow_run:
+    workflows:
+      - Build
+    types:
+      - completed
+
+permissions:
+  actions: write
+
+jobs:
+  cleanup-skipped-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete Build workflow run when build job was skipped
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runId = context.payload.workflow_run.id;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const jobs = await github.paginate(
+              github.rest.actions.listJobsForWorkflowRun,
+              {
+                owner,
+                repo,
+                run_id: runId,
+                per_page: 100,
+              }
+            );
+
+            const buildJob = jobs.find((job) => job.name === "build");
+
+            if (!buildJob) {
+              core.info(`No build job found in workflow run ${runId}; nothing to delete.`);
+              return;
+            }
+
+            core.info(
+              `Workflow run ${runId} build job conclusion: ${buildJob.conclusion ?? "unknown"}`
+            );
+
+            if (buildJob.conclusion !== "skipped") {
+              core.info("Build job was not skipped; keeping workflow run.");
+              return;
+            }
+
+            await github.rest.actions.deleteWorkflowRun({
+              owner,
+              repo,
+              run_id: runId,
+            });
+
+            core.info(`Deleted skipped Build workflow run ${runId}.`);

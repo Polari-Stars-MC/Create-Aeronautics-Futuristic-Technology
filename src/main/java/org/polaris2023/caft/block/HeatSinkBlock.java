@@ -1,4 +1,4 @@
-package org.polaris2023.caft.content.energy.block;
+package org.polaris2023.caft.block;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.Block;

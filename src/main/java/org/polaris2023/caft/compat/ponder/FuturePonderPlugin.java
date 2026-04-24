@@ -13,7 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
-import org.polaris2023.caft.content.energy.block.FutureEnergyCoreBlock;
+import org.polaris2023.caft.block.FutureEnergyCoreBlock;
 import org.polaris2023.caft.registry.ModBlocks;
 
 import java.util.function.UnaryOperator;

@@ -10,9 +10,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.polaris2023.caft.CreateAeronauticsFuturisticTechnology;
-import org.polaris2023.caft.content.energy.block.FutureEnergyCoreBlock;
-import org.polaris2023.caft.content.energy.block.EnergyConduitBlock;
-import org.polaris2023.caft.content.energy.block.HeatSinkBlock;
+import org.polaris2023.caft.block.FutureEnergyCoreBlock;
+import org.polaris2023.caft.block.EnergyConduitBlock;
+import org.polaris2023.caft.block.HeatSinkBlock;
 
 public final class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(CreateAeronauticsFuturisticTechnology.MODID);
@@ -25,7 +25,7 @@ public final class ModBlocks {
                     .mapColor(MapColor.COLOR_CYAN)
                     .strength(2.0F, 2.0F)
                     .sound(SoundType.METAL)
-                    .lightLevel(state -> state.getValue(FutureEnergyCoreBlock.ACTIVE) ? 12 + state.getValue(FutureEnergyCoreBlock.INTEGRITY) / 4 : 0)
+                    .lightLevel(state -> state.getValue(FutureEnergyCoreBlock.ACTIVE) ? Math.min(15, 12 + state.getValue(FutureEnergyCoreBlock.INTEGRITY) / 4) : 0)
     );
     public static final DeferredBlock<EnergyConduitBlock> ENERGY_CONDUIT = BLOCKS.registerBlock(
             "energy_conduit",

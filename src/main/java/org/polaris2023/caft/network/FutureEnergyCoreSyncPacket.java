@@ -8,9 +8,9 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.polaris2023.caft.CreateAeronauticsFuturisticTechnology;
-import org.polaris2023.caft.content.energy.blockentity.FutureEnergyCoreBlockEntity;
+import org.polaris2023.caft.blockentity.FutureEnergyCoreBlockEntity;
 
-public record FutureEnergyCoreSyncPacket(BlockPos pos, int energy, int heat, int integrity, boolean active) implements CustomPacketPayload {
+public record FutureEnergyCoreSyncPacket(BlockPos pos, int energy, int heat, int integrity, int requiredIntegrity, boolean active) implements CustomPacketPayload {
     public static final Type<FutureEnergyCoreSyncPacket> TYPE =
             new Type<>(CreateAeronauticsFuturisticTechnology.path("future_energy_core_sync"));
 
@@ -24,6 +24,8 @@ public record FutureEnergyCoreSyncPacket(BlockPos pos, int energy, int heat, int
                     FutureEnergyCoreSyncPacket::heat,
                     ByteBufCodecs.INT,
                     FutureEnergyCoreSyncPacket::integrity,
+                    ByteBufCodecs.INT,
+                    FutureEnergyCoreSyncPacket::requiredIntegrity,
                     ByteBufCodecs.BOOL,
                     FutureEnergyCoreSyncPacket::active,
                     FutureEnergyCoreSyncPacket::new
@@ -41,7 +43,7 @@ public record FutureEnergyCoreSyncPacket(BlockPos pos, int energy, int heat, int
 
         BlockEntity blockEntity = context.level().getBlockEntity(packet.pos());
         if (blockEntity instanceof FutureEnergyCoreBlockEntity energyCore) {
-            energyCore.applyClientSync(packet.energy(), packet.heat(), packet.integrity(), packet.active());
+            energyCore.applyClientSync(packet.energy(), packet.heat(), packet.integrity(), packet.requiredIntegrity(), packet.active());
         }
     }
 }

@@ -9,6 +9,7 @@ import net.neoforged.fml.config.ModConfig;
 import org.polaris2023.caft.network.FTPacketManager;
 import org.polaris2023.caft.registry.ModBlockEntities;
 import org.polaris2023.caft.registry.ModBlocks;
+import org.polaris2023.caft.registry.ModRecipes;
 import org.slf4j.Logger;
 
 @Mod(CreateAeronauticsFuturisticTechnology.MODID)
@@ -20,7 +21,9 @@ public class CreateAeronauticsFuturisticTechnology {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+        ModRecipes.register(modEventBus);
         FTPacketManager.init();
+
     }
 
     public static ResourceLocation path(String path) {

@@ -1,4 +1,4 @@
-package org.polaris2023.caft.content.energy.block;
+package org.polaris2023.caft.block;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
@@ -25,14 +25,14 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-import org.polaris2023.caft.content.energy.FutureEnergyCoreMultiblock;
-import org.polaris2023.caft.content.energy.blockentity.FutureEnergyCoreBlockEntity;
+import org.polaris2023.caft.content.energy.FutureEnergyCoreStructureRecipe;
+import org.polaris2023.caft.blockentity.FutureEnergyCoreBlockEntity;
 import org.polaris2023.caft.registry.ModBlockEntities;
 
 public class FutureEnergyCoreBlock extends BaseEntityBlock implements EntityBlock {
     public static final MapCodec<FutureEnergyCoreBlock> CODEC = simpleCodec(FutureEnergyCoreBlock::new);
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
-    public static final IntegerProperty INTEGRITY = IntegerProperty.create("integrity", 0, FutureEnergyCoreMultiblock.MAX_INTEGRITY);
+    public static final IntegerProperty INTEGRITY = IntegerProperty.create("integrity", 0, FutureEnergyCoreStructureRecipe.MAX_TOTAL_BLOCKS);
 
     public FutureEnergyCoreBlock(Properties properties) {
         super(properties);

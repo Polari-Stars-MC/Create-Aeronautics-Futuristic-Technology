@@ -1,0 +1,35 @@
+{
+  "type": "caft:future_energy_core_structure",
+  "controller": "C",
+  "depth": 3,
+  "height": 3,
+  "key": {
+    "C": {
+      "block": "caft:future_energy_core"
+    },
+    "E": {
+      "block": "caft:energy_conduit"
+    },
+    "H": {
+      "block": "caft:heat_sink"
+    }
+  },
+  "layers": [
+    [
+      " H ",
+      "H H",
+      " H "
+    ],
+    [
+      "HEH",
+      "ECE",
+      "HEH"
+    ],
+    [
+      " H ",
+      "H H",
+      " H "
+    ]
+  ],
+  "width": 3
+}

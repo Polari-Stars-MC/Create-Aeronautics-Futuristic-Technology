@@ -1,4 +1,4 @@
-package org.polaris2023.caft.content.energy.blockentity;
+package org.polaris2023.caft.blockentity;
 
 import foundry.veil.api.network.VeilPacketManager;
 import net.minecraft.core.BlockPos;
@@ -20,9 +20,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Vector3f;
 import org.polaris2023.caft.Config;
-import org.polaris2023.caft.content.energy.FutureEnergyCoreMultiblock;
+import org.polaris2023.caft.block.multi.FutureEnergyCoreMultiblock;
 import org.polaris2023.caft.content.energy.FutureForceStorage;
-import org.polaris2023.caft.content.energy.block.FutureEnergyCoreBlock;
+import org.polaris2023.caft.block.FutureEnergyCoreBlock;
 import org.polaris2023.caft.network.FutureEnergyCoreSyncPacket;
 import org.polaris2023.caft.registry.ModBlockEntities;
 
@@ -35,6 +35,7 @@ public class FutureEnergyCoreBlockEntity extends BlockEntity {
     private int idleTicks;
     private int scanCooldown;
     private int animationTick;
+    private int requiredIntegrity = FutureEnergyCoreMultiblock.MAX_INTEGRITY;
     private boolean assembledEffectPlayed;
 
     public FutureEnergyCoreBlockEntity(BlockPos pos, BlockState blockState) {
@@ -77,7 +78,7 @@ public class FutureEnergyCoreBlockEntity extends BlockEntity {
             this.refreshStructure();
         }
 
-        boolean complete = this.getIntegrity() >= FutureEnergyCoreMultiblock.MAX_INTEGRITY;
+        boolean complete = this.hasCompleteStructure();
         if (complete && this.rotationalInputBuffer > 0) {
             this.activeTicks++;
             this.idleTicks = 0;
@@ -130,12 +131,16 @@ public class FutureEnergyCoreBlockEntity extends BlockEntity {
     }
 
     public double getCurrentEfficiency() {
-        double integrityRatio = (double) this.getIntegrity() / FutureEnergyCoreMultiblock.MAX_INTEGRITY;
+        double integrityRatio = this.requiredIntegrity <= 0 ? 0.0D : (double) this.getIntegrity() / this.requiredIntegrity;
         double structureEfficiency = Mth.lerp(integrityRatio, Config.BASE_EFFICIENCY.get(), Config.COMPLETE_EFFICIENCY.get());
         int heatOverflow = Math.max(0, this.heat - Config.OVERHEAT_THRESHOLD_TICKS.get());
         double heatRatio = heatOverflow <= 0 ? 0.0D : Math.min(1.0D, (double) heatOverflow / Config.OVERHEAT_THRESHOLD_TICKS.get());
         double heatPenalty = heatRatio * Config.OVERHEAT_MAX_PENALTY.get();
         return Math.max(0.0D, structureEfficiency - heatPenalty);
+    }
+
+    public int getRequiredIntegrity() {
+        return this.requiredIntegrity;
     }
 
     public int getIntegrity() {
@@ -168,14 +173,15 @@ public class FutureEnergyCoreBlockEntity extends BlockEntity {
                 this.getEnergyStored(),
                 this.getCapacity(),
                 this.getIntegrity(),
-                FutureEnergyCoreMultiblock.MAX_INTEGRITY,
+                this.getRequiredIntegrity(),
                 Math.round(this.getCurrentEfficiency() * 100.0D)
         );
     }
 
-    public void applyClientSync(int energy, int heat, int integrity, boolean active) {
+    public void applyClientSync(int energy, int heat, int integrity, int requiredIntegrity, boolean active) {
         this.energyStorage.setAmount(energy);
         this.heat = heat;
+        this.requiredIntegrity = requiredIntegrity;
         this.updateBlockState(active, integrity);
     }
 
@@ -193,6 +199,7 @@ public class FutureEnergyCoreBlockEntity extends BlockEntity {
         }
 
         FutureEnergyCoreMultiblock.ValidationResult result = FutureEnergyCoreMultiblock.validate(this.level, this.worldPosition);
+        this.requiredIntegrity = result.requiredIntegrity();
         if (!result.complete() && this.isActive() && this.level instanceof ServerLevel serverLevel) {
             this.playBreakEffects(serverLevel);
         }
@@ -232,7 +239,12 @@ public class FutureEnergyCoreBlockEntity extends BlockEntity {
         this.heat = 0;
         this.activeTicks = 0;
         this.idleTicks = 0;
+        this.requiredIntegrity = FutureEnergyCoreMultiblock.MAX_INTEGRITY;
         this.assembledEffectPlayed = false;
+    }
+
+    private boolean hasCompleteStructure() {
+        return this.requiredIntegrity > 0 && this.getIntegrity() >= this.requiredIntegrity;
     }
 
     private void playAssemblyEffects(ServerLevel level) {
@@ -287,6 +299,7 @@ public class FutureEnergyCoreBlockEntity extends BlockEntity {
                 this.energyStorage.getAmount(),
                 this.heat,
                 this.getIntegrity(),
+                this.requiredIntegrity,
                 this.isActive()
         ));
     }
@@ -299,6 +312,7 @@ public class FutureEnergyCoreBlockEntity extends BlockEntity {
         tag.putInt("Heat", this.heat);
         tag.putInt("ActiveTicks", this.activeTicks);
         tag.putInt("IdleTicks", this.idleTicks);
+        tag.putInt("RequiredIntegrity", this.requiredIntegrity);
         tag.putBoolean("AssembledEffectPlayed", this.assembledEffectPlayed);
     }
 
@@ -310,6 +324,7 @@ public class FutureEnergyCoreBlockEntity extends BlockEntity {
         this.heat = tag.getInt("Heat");
         this.activeTicks = tag.getInt("ActiveTicks");
         this.idleTicks = tag.getInt("IdleTicks");
+        this.requiredIntegrity = tag.contains("RequiredIntegrity") ? tag.getInt("RequiredIntegrity") : FutureEnergyCoreMultiblock.MAX_INTEGRITY;
         this.assembledEffectPlayed = tag.getBoolean("AssembledEffectPlayed");
     }
 

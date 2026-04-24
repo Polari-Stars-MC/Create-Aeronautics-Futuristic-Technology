@@ -6,7 +6,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.polaris2023.caft.CreateAeronauticsFuturisticTechnology;
-import org.polaris2023.caft.content.energy.blockentity.FutureEnergyCoreBlockEntity;
+import org.polaris2023.caft.blockentity.FutureEnergyCoreBlockEntity;
 
 public final class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =

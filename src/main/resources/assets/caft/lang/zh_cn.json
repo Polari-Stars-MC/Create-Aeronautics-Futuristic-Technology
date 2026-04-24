@@ -12,5 +12,17 @@
   "caft.ponder.fe.text_3": "第2层",
   "caft.ponder.fe.text_4": "当搭建完成时这个方块会变化",
   "caft.ponder.fe.text_5": "第3层",
-  "caft.ponder.fe.text_6": "破坏任意一个方块都会引发爆炸。"
+  "caft.ponder.fe.text_6": "破坏任意一个方块都会引发爆炸。",
+  "jei.caft.future_energy_core.preview": "3D 预览",
+  "emi.caft.future_energy_core.preview": "3D 预览",
+  "rei.caft.future_energy_core.preview": "3D 预览",
+  "jei.caft.future_energy_core.title": "未来多方块配方结构",
+  "rei.caft.future_energy_core.title": "未来多方块配方结构",
+  "emi.category.caft.future_energy_core": "未来多方块配方结构",
+  "jei.caft.future_energy_core.controls.left": "左键以旋转",
+  "rei.caft.future_energy_core.controls.left": "左键以旋转, 右键以平移, 滚轮以缩放",
+  "jei.caft.future_energy_core.controls.right": "右键以平移",
+  "emi.caft.future_energy_core.controls.right": "右键以平移",
+  "jei.caft.future_energy_core.zoom": "滚轮以缩放",
+  "emi.caft.future_energy_core.zoom": "滚轮以缩放"
 }

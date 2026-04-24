@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
-import org.polaris2023.caft.content.energy.blockentity.FutureEnergyCoreBlockEntity;
+import org.polaris2023.caft.blockentity.FutureEnergyCoreBlockEntity;
 
 public class FutureEnergyCoreRenderer implements BlockEntityRenderer<FutureEnergyCoreBlockEntity> {
     public FutureEnergyCoreRenderer(BlockEntityRendererProvider.Context context) {

@@ -13,6 +13,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -21,7 +22,7 @@ import org.polaris2023.caft.CreateAeronauticsFuturisticTechnology;
 
 import java.util.UUID;
 
-public record RemoveDraggedSubLevelPacket(UUID subLevelId) implements CustomPacketPayload {
+public record RemoveDraggedSubLevelPacket(UUID subLevelId) implements AbstractSubLevelServerPacket {
     public static final Type<RemoveDraggedSubLevelPacket> TYPE =
             new Type<>(CreateAeronauticsFuturisticTechnology.path("remove_dragged_sub_level"));
 
@@ -38,8 +39,7 @@ public record RemoveDraggedSubLevelPacket(UUID subLevelId) implements CustomPack
     }
 
     public static void handle(RemoveDraggedSubLevelPacket packet, ServerPacketContext context) {
-        ServerLevel level = context.player().serverLevel();
-        ServerSubLevelContainer container = SubLevelContainer.getContainer(level);
+        ServerSubLevelContainer container = AbstractSubLevelServerPacket.handle(packet, context);
         if (container == null) {
             return;
         }

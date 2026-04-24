@@ -52,3 +52,15 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Create Release
+        uses: softprops/action-gh-release@v3
+        with:
+          name: "Release V ${{ needs.pre.outputs.MOD_VERSION }}"
+          body_path: CHANGE_LOG.MD
+          files: |
+            build/libs/*.jar
+            build/libs/*-sources.jar
+          draft: false
+          prerelease: 'rc'
+          generate_release_notes: true
+          token: '${{ github.token }}'

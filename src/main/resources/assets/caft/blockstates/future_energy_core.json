@@ -1,0 +1,112 @@
+{
+  "variants": {
+    "active=false,integrity=0": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=1": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=2": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=3": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=4": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=5": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=6": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=7": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=8": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=9": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=10": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=11": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=12": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=13": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=14": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=15": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=16": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=false,integrity=17": {
+      "model": "caft:block/future_energy_core_inactive"
+    },
+    "active=true,integrity=0": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=1": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=2": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=3": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=4": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=5": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=6": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=7": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=8": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=9": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=10": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=11": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=12": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=13": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=14": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=15": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=16": {
+      "model": "caft:block/future_energy_core_active"
+    },
+    "active=true,integrity=17": {
+      "model": "caft:block/future_energy_core_active"
+    }
+  }
+}

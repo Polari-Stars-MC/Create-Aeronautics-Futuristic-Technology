@@ -1,5 +1,16 @@
 {
+  "block.caft.energy_conduit": "Block.caft.energy Conduit",
+  "block.caft.future_energy_core": "Block.caft.future Energy Core",
+  "block.caft.heat_sink": "Block.caft.heat Sink",
+  "caft.ponder.fe.header": "Future Energy Multiblock Building",
+  "caft.ponder.fe.text_1": "Let's assemble the Future Energy Core.",
+  "caft.ponder.fe.text_2": "Layer 0",
+  "caft.ponder.fe.text_3": "Layer 1",
+  "caft.ponder.fe.text_4": "The block changes when the building is complete.",
+  "caft.ponder.fe.text_5": "Layer 2",
+  "caft.ponder.fe.text_6": "Destroying any block causes an explosion.",
   "key.caft.adjust": "Adjust physics by baka4n",
   "key.caft.del": "Delete physics by baka4n",
-  "key.categories.caft": "Create Aeronautics Futuristic Technology"
+  "key.categories.caft": "Create Aeronautics Futuristic Technology",
+  "tooltip.caft.future_energy_core.status": "AF %1$s/%2$s | Integrity %3$s/%4$s | Efficiency %5$s%%"
 }

@@ -46,19 +46,21 @@ public class KeyEvents {
     public static void tick(ClientTickEvent.Post event) {
         PhysicsStaffClientHandler handler = SimulatedClient.PHYSICS_STAFF_CLIENT_HANDLER;
         PhysicsStaffClientHandler.ClientDragSession session = handler.getDragSession();
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) {
+            return;
+        }
+        if (!player.isCreative()) {
+            return;
+        }
         while (DELETE.consumeClick() && session != null) {
+
 
             VeilPacketManager.server().sendPacket(new RemoveDraggedSubLevelPacket(session.dragSubLevel().getUniqueId()));
             handler.stopDragging();
         }
         while (HOME.consumeClick() && session != null) {
             session.dragOrientation().identity();
-
-            LocalPlayer player = Minecraft.getInstance().player;
-            if (player == null) {
-                return;
-            }
-
             Vec3 playerRelativeGoal = player.getLookAngle().scale(session.distance());
             VeilPacketManager.server().sendPacket(new PhysicsStaffDragPacket(
                     session.dragSubLevel().getUniqueId(),

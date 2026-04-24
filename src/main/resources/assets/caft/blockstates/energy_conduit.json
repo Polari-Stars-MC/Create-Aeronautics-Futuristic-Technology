@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "caft:block/energy_conduit"
+    }
+  }
+}

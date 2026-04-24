@@ -10,13 +10,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
 import org.polaris2023.caft.CreateAeronauticsFuturisticTechnology;
 
 import java.util.UUID;
 
-public record RealignDraggedSubLevelPacket(UUID subLevelId) implements CustomPacketPayload {
+public record RealignDraggedSubLevelPacket(UUID subLevelId) implements AbstractSubLevelServerPacket {
     public static final Type<RealignDraggedSubLevelPacket> TYPE =
             new Type<>(CreateAeronauticsFuturisticTechnology.path("realign_dragged_sub_level"));
 
@@ -33,8 +34,8 @@ public record RealignDraggedSubLevelPacket(UUID subLevelId) implements CustomPac
     }
 
     public static void handle(RealignDraggedSubLevelPacket packet, ServerPacketContext context) {
-        ServerLevel level = context.player().serverLevel();
-        ServerSubLevelContainer container = SubLevelContainer.getContainer(level);
+
+        ServerSubLevelContainer container = AbstractSubLevelServerPacket.handle(packet, context);
         if (container == null) {
             return;
         }
